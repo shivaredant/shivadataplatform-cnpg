@@ -1,6 +1,6 @@
 locals {
   # Read the intent file
-  raw_content = file("${path.module}/../Datastore.yaml")
+  raw_content = file("${path.module}/../Datastores.yaml")
 
   # Regex to extract values after the '#' and ':'
   team_name     = trimspace(regex("TeamName:\\s*(.*)", local.raw_content)[0])
