@@ -28,7 +28,7 @@ locals {
 # Generate the Manifest ONLY if DStype is postgres
 resource "local_file" "k8s_manifest" {
   count    = local.is_postgres ? 1 : 0
-  filename = "${path.module}/manifests/generated_db.yaml"
+  filename = "${path.module}/../manifests/generated_db.yaml"
   content  = <<EOF
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
