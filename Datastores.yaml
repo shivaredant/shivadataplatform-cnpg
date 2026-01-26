@@ -8,6 +8,6 @@
 ########### ENd add below ########
 TeamName: HRTEAM
 ClusterName: Recruitment
-Size: S
+Size: M
 DStype: postgres  
 ServiceLevel: Silver
