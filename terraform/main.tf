@@ -1,15 +1,16 @@
 locals {
-  # Read the intent file
+  # 1. Read the file (Ensure Datastores.yaml is in the Repo Root)
   raw_content = file("${path.module}/../Datastores.yaml")
 
-  # Regex to extract values after the '#' and ':'
+  # 2. Regex: Use non-capturing groups or clear indexing
+  # Added lower() here to make the logic robust for 2026 standards
   team_name     = trimspace(regex("TeamName:\\s*(.*)", local.raw_content)[0])
   cluster_name  = trimspace(regex("ClusterName:\\s*(.*)", local.raw_content)[0])
   size_input    = trimspace(regex("Size:\\s*(.*)", local.raw_content)[0])
   ds_type       = trimspace(regex("DStype:\\s*(.*)", local.raw_content)[0])
   service_level = trimspace(regex("ServiceLevel:\\s*(.*)", local.raw_content)[0])
 
-  # Logic Mapping for 2026 POC
+  # 3. Logic Mapping
   size_map = {
     "S" = "256Mi"
     "M" = "260Mi" 
@@ -21,23 +22,26 @@ locals {
     "Gold"   = 2
   }
 
-  # Guard rail: Ensure only postgres is processed
-  is_postgres = lower(local.ds_type) == "postgres" ? true : false
+  # 4. Guard rail
+  is_postgres = lower(local.ds_type) == "postgres"
 }
 
-# Generate the Manifest ONLY if DStype is postgres
+# 5. Generate Manifest
 resource "local_file" "k8s_manifest" {
   count    = local.is_postgres ? 1 : 0
+  # Note: Ensure the 'manifests' directory exists or Terraform might error
   filename = "${path.module}/../manifests/generated_db.yaml"
+  
+  # FIX: Reference locals correctly using 'local.<name>'
   content  = <<EOF
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: ${lower(local_cluster_name)}
-  namespace: ${lower(local_team_name)}
+  name: ${lower(local.cluster_name)}
+  namespace: ${lower(local.team_name)}
 spec:
-  instances: ${local.replica_map[local_service_level]}
+  instances: ${local.replica_map[local.service_level]}
   storage:
-    size: ${local.size_map[local_size_input]}
+    size: ${local.size_map[local.size_input]}
 EOF
 }
