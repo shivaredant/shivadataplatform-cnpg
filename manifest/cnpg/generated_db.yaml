@@ -1,9 +1,0 @@
-apiVersion: postgresql.cnpg.io/v1
-kind: Cluster
-metadata:
-  name: recruitment
-  namespace: hrteam
-spec:
-  instances: 1
-  storage:
-    size: 260Mi
