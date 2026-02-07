@@ -22,7 +22,7 @@ spec:
         dbname: postgres
         sslmode: require
       password:
-        name: recruitment-replication # Your existing secret
+        name: recruitment-app # Your existing secret
         key: password
 
   postgresql:
