@@ -12,18 +12,29 @@ spec:
   bootstrap:
     pg_basebackup:
       source: my-old-cluster  # This alias must match the 'name' below
-
   externalClusters:
-    - name: my-old-cluster    # This is just a label for this config
+    - name: my-old-cluster
       connectionParameters:
-        # THIS IS THE IMPORTANT PART: Points to your actual v18 service
-        host: recruitment-rw.hrteam.svc 
+        host: recruitment-rw.hrteam.svc
         user: streaming_replica
         dbname: postgres
-        sslmode: require
+        sslmode: verify-full # Higher security, uses the CA
       password:
-        name: recruitment-app # Your existing secret
+        # Even though we use certs, CNPG expects a password key 
+        # You can point to the replication secret's 'password' if it has one, 
+        # or keep the app one as a placeholder.
+        name: recruitment-app 
         key: password
+      # ADD THESE THREE LINES:
+      sslCert:
+        name: recruitment-replication
+        key: tls.crt
+      sslKey:
+        name: recruitment-replication
+        key: tls.key
+      sslRootCert:
+        name: recruitment-ca
+        key: tls.crt
 
   postgresql:
     parameters:
