@@ -2,6 +2,7 @@ apiVersion: postgresql.cnpg.io/v1
 kind: Publication
 metadata:
   name: recruitment-pub
+  namespace: hrteam  
 spec:
   cluster:
     name: recruitment-source-18
