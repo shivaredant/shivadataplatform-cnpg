@@ -12,7 +12,7 @@ spec:
     initdb:
       import:
         type: microservice
-        databases: ["app_db"]
+        databases: ["app"]
         source:
           externalCluster: recruitment-source-18
   externalClusters:
