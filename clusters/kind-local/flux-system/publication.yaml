@@ -6,7 +6,7 @@ metadata:
 spec:
   cluster:
     name: recruitment-source-18
-  dbname: app_db
+  dbname: app
   name: recruitment_publication
   target:
     allTables: true
