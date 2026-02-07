@@ -34,7 +34,7 @@ spec:
         key: tls.key
       sslRootCert:
         name: recruitment-ca
-        key: tls.crt
+        key: ca.crt
 
   postgresql:
     parameters:
