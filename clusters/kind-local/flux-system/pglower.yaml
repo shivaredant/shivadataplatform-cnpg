@@ -1,0 +1,30 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: recruitment-vlower
+  namespace: hrteam
+spec:
+  instances: 1
+  imageName: ghcr.io/cloudnative-pg/postgresql:17.0 
+  storage:
+    size: 256Mi
+
+  bootstrap:
+    pg_basebackup:
+      source: my-old-cluster  # This alias must match the 'name' below
+
+  externalClusters:
+    - name: my-old-cluster    # This is just a label for this config
+      connectionParameters:
+        # THIS IS THE IMPORTANT PART: Points to your actual v18 service
+        host: recruitment-rw.hrteam.svc 
+        user: streaming_replica
+        dbname: postgres
+        sslmode: require
+      password:
+        name: recruitment-replication # Your existing secret
+        key: password
+
+  postgresql:
+    parameters:
+      wal_level: logical
