@@ -5,7 +5,7 @@ metadata:
   namespace: hrteam  
 spec:
   cluster:
-    name: recruitment-source-18
+    name: recruitment
   dbname: app
   name: recruitment_publication
   target:
