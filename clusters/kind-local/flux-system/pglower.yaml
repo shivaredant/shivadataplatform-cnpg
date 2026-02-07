@@ -5,36 +5,24 @@ metadata:
   namespace: hrteam
 spec:
   instances: 1
-  imageName: ghcr.io/cloudnative-pg/postgresql:18.2 
+  imageName: ghcr.io/cloudnative-pg/postgresql:17.0
   storage:
     size: 256Mi
-
   bootstrap:
-    pg_basebackup:
-      source: my-old-cluster  # This alias must match the 'name' below
+    initdb:
+      import:
+        type: microservice
+        databases: ["app_db"]
+        source:
+          externalCluster: recruitment-source-18
   externalClusters:
-    - name: my-old-cluster
+    - name: recruitment-source-18
       connectionParameters:
         host: recruitment-rw.hrteam.svc
         user: streaming_replica
-        dbname: postgres
-        sslmode: verify-full # Higher security, uses the CA
       password:
-        # Even though we use certs, CNPG expects a password key 
-        # You can point to the replication secret's 'password' if it has one, 
-        # or keep the app one as a placeholder.
-        name: recruitment-app 
+        name: recruitment-app
         key: password
-      # ADD THESE THREE LINES:
-      sslCert:
-        name: recruitment-replication
-        key: tls.crt
-      sslKey:
-        name: recruitment-replication
-        key: tls.key
-      sslRootCert:
-        name: recruitment-ca
-        key: ca.crt
 
   postgresql:
     parameters:
