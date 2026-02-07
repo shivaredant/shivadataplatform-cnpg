@@ -6,4 +6,5 @@ resources:
 - pgbouncer.yaml
 - pg17.yaml
 - pglower.yaml
+- publication.yaml
 
