@@ -1,0 +1,112 @@
+pipeline:
+  name: Translator
+  identifier: Translator
+  projectIdentifier: default_project
+  orgIdentifier: default
+  tags: {}
+  stages:
+    - stage:
+        name: translator
+        identifier: translator
+        description: ""
+        type: Custom
+        spec:
+          execution:
+            steps:
+              - step:
+                  type: TerraformApply
+                  name: TerraformApply_1
+                  identifier: TerraformApply_1
+                  spec:
+                    provisionerIdentifier: TerraformTRanslator
+                    workingDirectory: /tmp/harness_poc
+                    configuration:
+                      type: Inline
+                      spec:
+                        configFiles:
+                          store:
+                            spec:
+                              gitFetchType: Branch
+                              branch: <+trigger.branch>
+                              folderPath: terraform
+                              connectorRef: sdp_git
+                            type: Git
+                  timeout: 10m
+              - step:
+                  type: ShellScript
+                  name: ShellScript_1
+                  identifier: ShellScript_1
+                  spec:
+                    shell: Bash
+                    workingDirectory: /tmp/harness_poc
+                    executionTarget: {}
+                    source:
+                      type: Inline
+                      spec:
+                        script: |
+                          GIT_PAT="<UR PAT token>"
+                          # Generate a unique branch name using the Pipeline Execution ID
+                          NEW_BRANCH="manifest-update-<+pipeline.executionId>"
+
+                          # 1. Enter the repo
+                          cd shivadataplatform-cnpg || { echo "Directory not found"; exit 1; }
+
+                          # 2. Configure Git
+                          git config user.email "shivaredant@gmail.com"
+                          git config user.name "shivaredant"
+
+                          # 3. Create and switch to the new branch
+                          git checkout -b ${NEW_BRANCH}
+
+                          # 4. Copy the generated file
+                          mkdir -p manifest/cnpg/
+                          cp /tmp/generated_newdb.yaml manifest/cnpg/generated_newdb.yaml 
+
+                          # 5. Add and Commit
+                          # We use --allow-empty in case there are really no changes, 
+                          # but usually, you want to see a commit.
+                          git add manifest/cnpg/generated_newdb.yaml
+                          git commit -m "Auto-generated manifest from execution <+pipeline.executionId> [skip ci]"
+
+                          # 6. Push to the NEW branch
+                          #git push https://shivaredant:${GIT_PAT}@://github.com ${NEW_BRANCH}
+                          git push https://${GIT_PAT}@github.com/shivaredant/shivadataplatform-cnpg
+
+                          echo "Successfully pushed to new branch: ${NEW_BRANCH}"
+
+                          # 7. Create Pull Request using GitHub API
+                          echo "Creating Pull Request for branch ${NEW_BRANCH}..."
+                          curl -L \
+                              -X POST \
+                              -H "Accept: application/vnd.github+json" \
+                              -H "Authorization: Bearer ${GIT_PAT}" \
+                              -H "X-GitHub-Api-Version: 2022-11-28" \
+                              https://api.github.com/repos/shivaredant/shivadataplatform-cnpg/pulls \
+                              -d "{
+                                  \"title\":\"Auto-generated manifest: ${NEW_BRANCH}\",
+                                  \"body\":\"This PR was automatically created by Harness Pipeline Execution: <+pipeline.executionId>\",
+                                  \"head\":\"${NEW_BRANCH}\",
+                                  \"base\":\"main\"
+                                  }"
+
+                          echo "PR created successfully."
+                    environmentVariables: []
+                    outputVariables: []
+                  timeout: 10m
+        tags: {}
+        variables:
+          - name: git_pat
+            type: String
+            description: ""
+            required: true
+            value: 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
+        delegateSelectors:
+          - docker-delegate
+  delegateSelectors:
+    - docker-delegate
+  properties:
+    ci:
+      codebase:
+        connectorRef: sdp_git
+        build: <+input>
+        sparseCheckout: []
