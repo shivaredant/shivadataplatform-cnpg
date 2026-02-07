@@ -1,0 +1,11 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Publication
+metadata:
+  name: recruitment-pub
+spec:
+  cluster:
+    name: recruitment-source-18
+  dbname: app_db
+  name: recruitment_publication
+  target:
+    allTables: true
