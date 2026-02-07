@@ -1,0 +1,15 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: recruitment-v17
+  namespace: hrteam
+spec:
+  instances: 1
+  # Using an older version image
+  imageName: ghcr.io/cloudnative-pg/postgresql:17.0
+  storage:
+    size: 256Mi
+  bootstrap:
+    initdb:
+      database: app
+      owner: app
