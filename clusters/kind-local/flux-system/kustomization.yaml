@@ -7,4 +7,5 @@ resources:
 - pg17.yaml
 - pglower.yaml
 - publication.yaml
+- subscription.yaml
 
