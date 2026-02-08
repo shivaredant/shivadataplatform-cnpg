@@ -20,4 +20,4 @@ spec:
   # This must match 'spec.name' from your Publication (recruitment-pub)
   publicationName: recruitment_publication
   # Optional: Ensure it starts replicating immediately
-  enabled: true
+  #enabled: true
