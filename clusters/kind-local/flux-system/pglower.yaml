@@ -4,7 +4,7 @@ metadata:
   name: recruitment-vhigher
   namespace: hrteam
 spec:
-  instances: 1
+  instances: 3
   imageName: ghcr.io/cloudnative-pg/postgresql:18.1
   enableSuperuserAccess: true
   storage:
