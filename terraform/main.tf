@@ -31,7 +31,7 @@ resource "local_file" "k8s_manifest" {
   count    = local.is_postgres ? 1 : 0
   # Note: Ensure the 'manifests' directory exists or Terraform might error
   #filename = "${path.module}/../manifest/cnpg/generated_newdb.yaml"
-  filename = "/tmp/generated_newdb.yaml"
+  filename = "/tmp/generate_soficodb.yaml"
   
   # FIX: Reference locals correctly using 'local.<name>'
   content  = <<EOF
