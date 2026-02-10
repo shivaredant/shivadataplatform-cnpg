@@ -1,4 +1,4 @@
-####Platform Team Template ###########
+####Platform Team Template ############
 ###Dont modify first lines but add below
 #T#eamName: HRTEAM #postgres cluster will be created under this name
 #C#lusterName: Recruitment # name of your postgres cluster
