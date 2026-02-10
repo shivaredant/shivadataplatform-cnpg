@@ -3,9 +3,4 @@ kind: Kustomization
 resources:
 - gotk-components.yaml
 - gotk-sync.yaml
-- pgbouncer.yaml
-- pg17.yaml
-- pglower.yaml
-- publication.yaml
-- subscription.yaml
 
