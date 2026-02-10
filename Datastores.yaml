@@ -6,8 +6,8 @@
 #D#Stype: postgres/Mango/Kafka
 #S#erviceLevel: Silver/Gold # Silver-replicas:1 Gold-replicas:2
 ########### ENd add below ########
-TeamName: HRTEAM
-ClusterName: Recruitment
+TeamName: sofico
+ClusterName: consumer1
 Size: S
 DStype: postgres  
 ServiceLevel: Silver
