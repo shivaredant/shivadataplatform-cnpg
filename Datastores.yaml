@@ -5,7 +5,7 @@
 #S#ize: S/M/L # Small-256Mi Middle-260Mi Large-270Mi
 #D#Stype: postgres/Mango/Kafka
 #S#erviceLevel: Silver/Gold # Silver-replicas:1 Gold-replicas:2
-########### ENd add below ########
+########### ENd add below ##########
 TeamName: sofico
 ClusterName: consumer1
 Size: S
